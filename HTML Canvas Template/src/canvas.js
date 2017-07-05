@@ -2,9 +2,24 @@
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
-canvas.width = innerWidth;
-canvas.height = innerHeight;
+var isFullScreen = true;
+fitToContainer(canvas);
 
+function fitToContainer(canvas){
+  // Make it visually fill the positioned parent
+  if(isFullScreen){
+	  canvas.width = innerWidth;
+	  canvas.height = innerHeight;
+  }
+  else{
+	 canvas.style.width ='50%';
+	// ...then set the internal size to match
+	canvas.width  = canvas.offsetWidth;
+	canvas.height = 400; 
+  }
+  
+  
+}
 
 // Variables
 let mouse = {
@@ -22,14 +37,13 @@ const colors = [
 
 // Event Listeners
 addEventListener("mousemove", function(event) {
-	mouse.x = event.clientX;
-	mouse.y = event.clientY;
+	var rect = canvas.getBoundingClientRect();
+    mouse.x= event.clientX - rect.left;
+    mouse.y= event.clientY - rect.top;        
 });
 
 addEventListener("resize", function() {
-	canvas.width = innerWidth;	
-	canvas.height = innerHeight;
-
+	fitToContainer(canvas);
 	init();
 });
 
